@@ -1,3 +1,6 @@
+CREATE DATABASE IF NOT EXISTS db;
+USE db;
+
 CREATE TABLE ExerciseList (
 	ID INT NOT NULL AUTO_INCREMENT,
     ExerciseType char(25) NOT NULL,

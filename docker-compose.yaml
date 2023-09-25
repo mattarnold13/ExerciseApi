@@ -1,0 +1,14 @@
+version: '3.3'
+services:
+  database:
+    image: mysql_exercise_db
+    volumes:
+       - "./Util/:/docker-entrypoint-initdb.d"
+       - "exercise-volume:/var/lib/mysql"
+    environment:
+      MYSQL_DATABASE: db
+      MYSQL_ROOT_PASSWORD: mysecretpassword
+    ports:
+      - '3306:3306'
+volumes:
+  exercise-volume:
