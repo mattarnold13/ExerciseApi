@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\mattn\\Documents\\Programming\\ExerciseApi\\ExerciseApi\\ExerciseApi.csproj": {}
+    "/Users/micahkimel/Documents/ExerciseApi/ExerciseApi.csproj": {}
   },
   "projects": {
-    "C:\\Users\\mattn\\Documents\\Programming\\ExerciseApi\\ExerciseApi\\ExerciseApi.csproj": {
+    "/Users/micahkimel/Documents/ExerciseApi/ExerciseApi.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\mattn\\Documents\\Programming\\ExerciseApi\\ExerciseApi\\ExerciseApi.csproj",
+        "projectUniqueName": "/Users/micahkimel/Documents/ExerciseApi/ExerciseApi.csproj",
         "projectName": "ExerciseApi",
-        "projectPath": "C:\\Users\\mattn\\Documents\\Programming\\ExerciseApi\\ExerciseApi\\ExerciseApi.csproj",
-        "packagesPath": "C:\\Users\\mattn\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\mattn\\Documents\\Programming\\ExerciseApi\\ExerciseApi\\obj\\",
+        "projectPath": "/Users/micahkimel/Documents/ExerciseApi/ExerciseApi.csproj",
+        "packagesPath": "/Users/micahkimel/.nuget/packages/",
+        "outputPath": "/Users/micahkimel/Documents/ExerciseApi/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\mattn\\AppData\\Roaming\\NuGet\\NuGet.Config"
+          "/Users/micahkimel/.nuget/NuGet/NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net7.0"
@@ -78,7 +78,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.401\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "/opt/homebrew/Cellar/dotnet/7.0.100/libexec/sdk/7.0.100/RuntimeIdentifierGraph.json"
         }
       }
     }

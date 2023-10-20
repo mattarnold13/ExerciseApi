@@ -12,8 +12,6 @@ namespace workoutapicore.Controllers
 {
     [ApiController]
     [Route("work")]
-    [EnableCors]
-    [Authorize]
     public class ExerciseController : Controller
     {
         private IConfiguration _config;
@@ -22,8 +20,8 @@ namespace workoutapicore.Controllers
             _config = config;
         }
 
-        [HttpPost("exerciseSet")]
         [EnableCors]
+        [HttpPost("exerciseSet")]
         public async Task<List<object>> exerciseSet(ExerciseClass workout)
         {
         
@@ -39,8 +37,8 @@ namespace workoutapicore.Controllers
             }
         }
 
-        [HttpGet("getExercises")]
         [EnableCors]
+        [HttpGet("getExercises")]
         public async Task<List<object>> getExercises()
         {
             using (IDbConnection connection = new MySqlConnection("server=127.0.0.1;uid=root;pwd=password;database=db"))
@@ -50,8 +48,19 @@ namespace workoutapicore.Controllers
             }
         }
 
-        [HttpGet("getUserExerciseSetByWorkout")]
         [EnableCors]
+        [HttpGet("getExerciseList")]
+        public async Task<List<object>> getExerciseList()
+        {
+            using (IDbConnection connection = new MySqlConnection("server=127.0.0.1;uid=root;pwd=mysecretpassword;database=db"))
+            {
+                var output = connection.Query(@$"Select * FROM db.ExerciseList").ToList();
+                return output;
+            }
+        }
+
+        [EnableCors]
+        [HttpGet("getUserExerciseSetByWorkout")]
         public async Task<List<object>> getUserExerciseSets(int? ExerciseId, char? ExerciseType, string? ExerciseDate, decimal? ExerciseTime, 
                                                             decimal? ExerciseLevel, decimal? ExerciseReps, decimal? ExerciseSets,
                                                             decimal? ExerciseWeight, char? ExerciseNotes, decimal? ExercisePerson)
