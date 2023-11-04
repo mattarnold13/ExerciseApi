@@ -3,14 +3,34 @@ USE db;
 
 CREATE TABLE ExerciseList (
 	ID INT NOT NULL AUTO_INCREMENT,
-    ExerciseType char(25) NOT NULL,
-    ExerciseDate DATE,
-    ExerciseTime NUMERIC(4,0),
-    ExerciseLevel NUMERIC(4,0),
-    ExerciseReps NUMERIC(2,0),
-    ExerciseSets NUMERIC(2,0),
-    ExerciseWeight NUMERIC (3,0),
+    ExerciseMachineID INT NOT NULL,
+    ExerciseDate INT,
+    ExerciseTime INT,
+    ExerciseLevel INT,
+    ExerciseReps INT,
+    ExerciseSets INT,
+    ExerciseWeight INT,
     ExerciseNotes VARCHAR(100),
-    ExercisePerson Numeric(3,0),
+    ExercisePersonID INT,
     primary key (id)
 );
+
+CREATE TABLE userlist (
+  ID int NOT NULL AUTO_INCREMENT,
+  FirstName varchar(45) DEFAULT NULL,
+  LastName varchar(45) DEFAULT NULL,
+  Email varchar(45) DEFAULT NULL,
+  Password varchar(45) DEFAULT NULL,
+  PRIMARY KEY (`ID`)
+)
+
+CREATE TABLE machinetypes (
+  ID int NOT NULL AUTO_INCREMENT,
+  Description varchar(45) DEFAULT NULL,
+  MachineNumber int DEFAULT NULL,
+  SeatPosition int DEFAULT NULL,
+  LegArmPosition int DEFAULT NULL,
+  UserID int DEFAULT NULL,
+  PRIMARY KEY (`ID`)
+)
+

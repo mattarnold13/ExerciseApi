@@ -3,7 +3,10 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using MySql.Data.MySqlClient;
+using MySqlX.XDevAPI.Common;
+using Org.BouncyCastle.Cms;
 using System.Data;
+using System.Reflection.Metadata.Ecma335;
 using System.Security.Claims;
 using System.Text;
 using workoutapicore.Model;
@@ -22,18 +25,36 @@ namespace workoutapicore.Controllers
 
         [EnableCors]
         [HttpPost("exerciseSet")]
-        public async Task<List<object>> exerciseSet(ExerciseClass workout)
+        public async Task<bool> exerciseSet(ExerciseClass workout)
         {
-        
-            using (IDbConnection connection = new MySqlConnection("server=127.0.0.1;uid=root;pwd=password;database=db"))
+            using (IDbConnection connection = new MySqlConnection("server=127.0.0.1;uid=root;pwd=password;database=exercise"))
             {
-                var output = connection.Query(@$"insert into db.ExerciseSet (ExerciseId, ExerciseType, ExerciseDate, ExerciseTime,
-                    ExerciseLevel, ExerciseReps,ExerciseSets, ExerciseWeight,ExerciseNotes,ExercisePerson ) 
-                    values ({workout.ExerciseId},
-                    {workout.ExerciseType}, {workout.ExerciseDate}, {workout.ExerciseTime}, {workout.ExerciseLevel}.
-                    {workout.ExerciseReps},{workout.ExerciseSets},{workout.ExerciseWeight},{workout.ExerciseNotes},
-                    {workout.ExercisePerson})").ToList();
-                return output;
+                string insertQuery = @"insert into exercise.exerciselist 
+                (ID,ExerciseMachineID,ExerciseDate,ExerciseTime,ExerciseLevel,
+                  ExerciseReps,ExerciseSets,ExerciseWeight,ExerciseNotes,
+                  ExercisePersonID) 
+                VALUE 
+                (@ID, @ExerciseMachineID, @ExerciseDate,  @ExerciseTime, @ExerciseLevel, 
+                 @ExerciseReps, @ExerciseSets,  @ExerciseWeight, @ExerciseNotes,
+                 @ExercisePerson)";
+                {
+                    var result = connection.Execute(insertQuery, new
+                    {
+                        workout.ID,
+                        workout.ExerciseMachineID,
+                        workout.ExerciseDate,
+                        workout.ExerciseTime,
+                        workout.ExerciseLevel,
+                        workout.ExerciseReps,
+                        workout.ExerciseSets,
+                        workout.ExerciseWeight,
+                        workout.ExerciseNotes,
+                        workout.ExercisePersonID
+
+                    });
+
+                }
+                return true;
             }
         }
 
@@ -41,9 +62,9 @@ namespace workoutapicore.Controllers
         [HttpGet("getExercises")]
         public async Task<List<object>> getExercises()
         {
-            using (IDbConnection connection = new MySqlConnection("server=127.0.0.1;uid=root;pwd=password;database=db"))
+            using (IDbConnection connection = new MySqlConnection("server=127.0.0.1;uid=root;pwd=password;database=exercise"))
             {
-                var output = connection.Query(@$"Select ExerciseId as `key`, Name as value FROM db.ExerciseClass").ToList();
+                var output = connection.Query(@$"select * FROM exercise.exerciselist").ToList();
                 return output;
             }
         }
@@ -52,28 +73,28 @@ namespace workoutapicore.Controllers
         [HttpGet("getExerciseList")]
         public async Task<List<object>> getExerciseList()
         {
-            using (IDbConnection connection = new MySqlConnection("server=127.0.0.1;uid=root;pwd=mysecretpassword;database=db"))
+            using (IDbConnection connection = new MySqlConnection("server=127.0.0.1;uid=root;pwd=password;database=exercise"))
             {
-                var output = connection.Query(@$"Select * FROM db.ExerciseList").ToList();
+                var output = connection.Query(@$"Select * FROM exercise.ExerciseList").ToList();
                 return output;
             }
         }
 
         [EnableCors]
         [HttpGet("getUserExerciseSetByWorkout")]
-        public async Task<List<object>> getUserExerciseSets(int? ExerciseId, char? ExerciseType, string? ExerciseDate, decimal? ExerciseTime, 
+        public async Task<List<object>> getUserExerciseSets(int? ExerciseId, char? ExerciseMachineID, string? ExerciseDate, decimal? ExerciseTime,
                                                             decimal? ExerciseLevel, decimal? ExerciseReps, decimal? ExerciseSets,
-                                                            decimal? ExerciseWeight, char? ExerciseNotes, decimal? ExercisePerson)
+                                                            decimal? ExerciseWeight, char? ExerciseNotes, decimal? ExercisePersonID)
         {
-            using IDbConnection connection = new MySqlConnection("server=127.0.0.1;uid=root;pwd=password;database=db");
+            using IDbConnection connection = new MySqlConnection("server=127.0.0.1;uid=root;pwd=password;database=exercise");
             string WhereClause = "";
             if (ExerciseId != null)
             {
                 WhereClause += @$" AND ExerciseId = {ExerciseId} ";
             }
-            if (ExerciseType != null)
+            if (ExerciseMachineID != null)
             {
-                WhereClause += @$" AND ExerciseType = {ExerciseType} ";
+                WhereClause += @$" AND ExerciseType = {ExerciseMachineID} ";
             }
             if (ExerciseDate != null)
             {
@@ -103,18 +124,30 @@ namespace workoutapicore.Controllers
             {
                 WhereClause += @$" AND ExerciseNotes = {ExerciseNotes} ";
             }
-            if (ExercisePerson != null)
+            if (ExercisePersonID != null)
             {
-                WhereClause += @$" AND ExercisePerson = {ExercisePerson} ";
+                WhereClause += @$" AND ExercisePerson = {ExercisePersonID} ";
             }
 
-            var output = connection.Query(@$"Select es.ExerciseID, es.ExerciseType, es.ExerciseDate, es.ExerciseTime,
+            var output = connection.Query(@$"Select es.ExerciseID, es.ExerciseMachineID, es.ExerciseDate, es.ExerciseTime,
                                                  es.ExerciseLevel, es.ExerciseReps, es.ExerciseSets,
-                                                 es.ExerciseWeight, es.ExerciseNotes, es.ExercisePerson)
+                                                 es.ExerciseWeight, es.ExerciseNotes, es.ExercisePersonID)
                                                 
                 FROM db.ExerciseClass es
                 where " + WhereClause).ToList();
             return output;
+        }
+    }
+
+    internal class SqlParameter
+    {
+        private string v;
+        private int iD;
+
+        public SqlParameter(string v, int iD)
+        {
+            this.v = v;
+            this.iD = iD;
         }
     }
 }
