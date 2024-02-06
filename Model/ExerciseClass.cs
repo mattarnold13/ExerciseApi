@@ -8,6 +8,8 @@ namespace workoutapicore.Model
         public int ExerciseMachineID { get; set; }
         public int ExerciseDate { get; set; }
         public int ExerciseTime { get; set; }
+        public decimal ExerciseSpeed { get; set; }
+        public decimal ExerciseIncline { get; set; }
         public int ExerciseLevel { get; set; }
         public int ExerciseReps { get; set; }
         public int ExerciseSets { get; set; }

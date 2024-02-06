@@ -2811,11 +2811,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\mattn\\Documents\\Programming\\ExerciseApi\\ExerciseApi\\ExerciseApi.csproj",
+      "projectUniqueName": "C:\\Users\\mattn\\OneDrive\\Documents\\Programming\\ExerciseApi\\ExerciseApi\\ExerciseApi.csproj",
       "projectName": "ExerciseApi",
-      "projectPath": "C:\\Users\\mattn\\Documents\\Programming\\ExerciseApi\\ExerciseApi\\ExerciseApi.csproj",
+      "projectPath": "C:\\Users\\mattn\\OneDrive\\Documents\\Programming\\ExerciseApi\\ExerciseApi\\ExerciseApi.csproj",
       "packagesPath": "C:\\Users\\mattn\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\mattn\\Documents\\Programming\\ExerciseApi\\ExerciseApi\\obj\\",
+      "outputPath": "C:\\Users\\mattn\\OneDrive\\Documents\\Programming\\ExerciseApi\\ExerciseApi\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\mattn\\AppData\\Roaming\\NuGet\\NuGet.Config"

@@ -25,7 +25,7 @@ namespace workoutapicore.Controllers
 
         [EnableCors]
         [HttpPost("userSet")]
-        public async Task<bool> userSet(UserClass user)
+        public bool userSet(UserClass user)
         {
             using (IDbConnection connection = new MySqlConnection("server=127.0.0.1;uid=root;pwd=password;database=exercise"))
             {
@@ -47,11 +47,11 @@ namespace workoutapicore.Controllers
                 return true;
             }
         }
-      
+
 
         [EnableCors]
         [HttpGet("getUsers")]
-        public async Task<List<object>> getUsers()
+        public List<object> getUsers()
         {
             using (IDbConnection connection = new MySqlConnection("server=127.0.0.1;uid=root;pwd=password;database=exercise"))
             {
@@ -60,10 +60,10 @@ namespace workoutapicore.Controllers
             }
         }
 
-    
-    //    
 
-    internal class SqlParameter
+        //    
+
+        internal class SqlParameter
     {
         private string v;
         private int iD;

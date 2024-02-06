@@ -30,26 +30,30 @@ namespace workoutapicore.Controllers
             using (IDbConnection connection = new MySqlConnection("server=127.0.0.1;uid=root;pwd=password;database=exercise"))
             {
                 string insertQuery = @"insert into exercise.exerciselist 
-                (ID,ExerciseMachineID,ExerciseDate,ExerciseTime,ExerciseLevel,
+                (ID,ExerciseMachineID,ExerciseDate,ExerciseTime,ExerciseSpeed,
+                  ExerciseIncline, ExerciseLevel,
                   ExerciseReps,ExerciseSets,ExerciseWeight,ExerciseNotes,
                   ExercisePersonID) 
                 VALUE 
-                (@ID, @ExerciseMachineID, @ExerciseDate,  @ExerciseTime, @ExerciseLevel, 
+                (@ID, @ExerciseMachineID, @ExerciseDate,  @ExerciseTime, 
+                 @ExerciseSpeed,@ExerciseIncline,@ExerciseLevel, 
                  @ExerciseReps, @ExerciseSets,  @ExerciseWeight, @ExerciseNotes,
-                 @ExercisePerson)";
+                 @ExercisePersonID)";
                 {
                     var result = connection.Execute(insertQuery, new
                     {
-                        workout.ID,
-                        workout.ExerciseMachineID,
-                        workout.ExerciseDate,
-                        workout.ExerciseTime,
-                        workout.ExerciseLevel,
-                        workout.ExerciseReps,
-                        workout.ExerciseSets,
-                        workout.ExerciseWeight,
-                        workout.ExerciseNotes,
-                        workout.ExercisePersonID
+                        workout.@ID,
+                        workout.@ExerciseMachineID,
+                        workout.@ExerciseDate,
+                        workout.@ExerciseTime,
+                        workout.@ExerciseSpeed,
+                        workout.@ExerciseIncline,
+                        workout.@ExerciseLevel,
+                        workout.@ExerciseReps,
+                        workout.@ExerciseSets,
+                        workout.@ExerciseWeight,
+                        workout.@ExerciseNotes,
+                        workout.@ExercisePersonID
 
                     });
 
@@ -64,7 +68,9 @@ namespace workoutapicore.Controllers
         {
             using (IDbConnection connection = new MySqlConnection("server=127.0.0.1;uid=root;pwd=password;database=exercise"))
             {
-                var output = connection.Query(@$"select * FROM exercise.exerciselist").ToList();
+                var output = connection.Query(@$"select * FROM exercise.exerciselist a 
+                                                join exercise.machinetypes b on 
+                                                a.ExerciseMachineID = b.machineID").ToList();
                 return output;
             }
         }
@@ -82,58 +88,114 @@ namespace workoutapicore.Controllers
 
         [EnableCors]
         [HttpGet("getUserExerciseSetByWorkout")]
-        public async Task<List<object>> getUserExerciseSets(int? ExerciseId, char? ExerciseMachineID, string? ExerciseDate, decimal? ExerciseTime,
-                                                            decimal? ExerciseLevel, decimal? ExerciseReps, decimal? ExerciseSets,
-                                                            decimal? ExerciseWeight, char? ExerciseNotes, decimal? ExercisePersonID)
+        public async Task<List<object>> getUserExerciseSets(int? ID, int? ExerciseMachineID, int? ExerciseDate, int? ExerciseTime,
+                                                            decimal? ExerciseSpeed, decimal? ExerciseIncline, int? ExerciseLevel, 
+                                                            int? ExerciseReps, int? ExerciseSets, int? ExerciseWeight,
+                                                            string? ExerciseNotes, int? ExercisePersonID)
         {
             using IDbConnection connection = new MySqlConnection("server=127.0.0.1;uid=root;pwd=password;database=exercise");
             string WhereClause = "";
-            if (ExerciseId != null)
+            if (ID != null)
             {
-                WhereClause += @$" AND ExerciseId = {ExerciseId} ";
+                WhereClause += @$" ID = {ID} ";
             }
+
             if (ExerciseMachineID != null)
             {
-                WhereClause += @$" AND ExerciseType = {ExerciseMachineID} ";
+                if (WhereClause != "")
+                {
+                    WhereClause += @$" AND ";
+                }       
+                WhereClause += @$" ExerciseType = {ExerciseMachineID} ";
+                
             }
             if (ExerciseDate != null)
             {
-                WhereClause += @$" AND ExerciseDate = {ExerciseDate} ";
+                if (WhereClause != "")
+                {
+                    WhereClause += @$" AND ";
+                }       
+                WhereClause += @$" ExerciseDate = {ExerciseDate} ";
             }
             if (ExerciseTime != null)
             {
-                WhereClause += @$" AND ExerciseTime = {ExerciseTime} ";
+                if (WhereClause != "")
+                {
+                    WhereClause += @$" AND ";
+                }     
+                WhereClause += @$" ExerciseTime = {ExerciseTime} ";
+            }
+            if (ExerciseSpeed != null)
+            {
+                if (WhereClause != "")
+                {
+                    WhereClause += @$" AND ";
+                }   
+                WhereClause += @$" ExerciseSpeed = {ExerciseSpeed} ";
+            }
+            if (ExerciseIncline != null)
+            {
+                if (WhereClause != "")
+                {
+                    WhereClause += @$" AND ";
+                }   
+                WhereClause += @$" ExerciseIncline = {ExerciseIncline} ";
             }
             if (ExerciseLevel != null)
             {
-                WhereClause += @$" AND ExerciseLevel = {ExerciseLevel} ";
+                if (WhereClause != "")
+                {
+                    WhereClause += @$" AND ";
+                }   
+                WhereClause += @$" ExerciseLevel = {ExerciseLevel} ";
             }
             if (ExerciseReps != null)
             {
-                WhereClause += @$" AND ExerciseReps = {ExerciseReps} ";
+                if (WhereClause != "")
+                {
+                    WhereClause += @$" AND ";
+                }   
+                WhereClause += @$" ExerciseReps = {ExerciseReps} ";
             }
             if (ExerciseSets != null)
             {
-                WhereClause += @$" AND ExerciseSets = {ExerciseSets} ";
+                if (WhereClause != "")
+                {
+                    WhereClause += @$" AND ";
+                }   
+                WhereClause += @$" ExerciseSets = {ExerciseSets} ";
             }
             if (ExerciseWeight != null)
             {
-                WhereClause += @$" AND ExerciseWeight = {ExerciseWeight} ";
+                if (WhereClause != "")
+                {
+                    WhereClause += @$" AND ";
+                }   
+                WhereClause += @$" ExerciseWeight = {ExerciseWeight} ";
             }
             if (ExerciseNotes != null)
             {
-                WhereClause += @$" AND ExerciseNotes = {ExerciseNotes} ";
+                if (WhereClause != "")
+                {
+                    WhereClause += @$" AND ";
+                }   
+                WhereClause += @$" ExerciseNotes = {ExerciseNotes} ";
             }
             if (ExercisePersonID != null)
             {
-                WhereClause += @$" AND ExercisePerson = {ExercisePersonID} ";
+                if (WhereClause != "")
+                {
+                    WhereClause += @$" AND ";
+                }   
+                WhereClause += @$" ExercisePersonID = {ExercisePersonID} ";
             }
 
-            var output = connection.Query(@$"Select es.ExerciseID, es.ExerciseMachineID, es.ExerciseDate, es.ExerciseTime,
-                                                 es.ExerciseLevel, es.ExerciseReps, es.ExerciseSets,
-                                                 es.ExerciseWeight, es.ExerciseNotes, es.ExercisePersonID)
+            var output = connection.Query(@$"Select es.ID, es.ExerciseMachineID, es.ExerciseDate, es.ExerciseTime,
+                                                 es.ExerciseSpeed, es.ExerciseIncline, es.ExerciseLevel, 
+                                                 es.ExerciseReps, es.ExerciseSets,
+                                                 es.ExerciseWeight, es.ExerciseNotes, es.ExercisePersonID
                                                 
-                FROM db.ExerciseClass es
+                FROM exercise.ExerciseList es
                 where " + WhereClause).ToList();
             return output;
         }
